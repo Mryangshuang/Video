@@ -7,12 +7,11 @@ import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
+import com.ys.com.video.Fragments.MusicFragment;
 import com.ys.com.video.Interface.IPlayer;
 import com.ys.com.video.Tool.ToastTool;
-import com.ys.com.video.Fragments.MusicFragment;
 
 import java.io.File;
 import java.util.Timer;
@@ -67,8 +66,6 @@ public class MyMediaPlayerPService extends Service {
                 Toast.makeText(getApplicationContext(), "默认歌曲", Toast.LENGTH_LONG).show();
             } else {
                 mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + strName;
-//                mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +  MusicActivity.songs[0];
-                Log.i("MES",mPath);
             }
             if (!new File(mPath).exists()) {
                 ToastTool.toast(getApplicationContext(),"没有找到文件");
@@ -79,7 +76,7 @@ public class MyMediaPlayerPService extends Service {
             try {
                 mPlayer.reset();
                 mPlayer.setDataSource(mPath);
-                mPlayer.prepareAsync();
+                mPlayer.prepare();
             } catch (Exception e) {
                 e.printStackTrace();
             }

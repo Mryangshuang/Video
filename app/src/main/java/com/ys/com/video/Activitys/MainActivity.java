@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.ys.com.video.R;
 import com.ys.com.video.Fragments.BaiduFragment;
 import com.ys.com.video.Fragments.BdzFragment;
 import com.ys.com.video.Fragments.MusicFragment;
 import com.ys.com.video.Fragments.QishiFragment;
 import com.ys.com.video.Fragments.VideoFragment;
+import com.ys.com.video.R;
 
 import java.util.ArrayList;
 import java.util.List;

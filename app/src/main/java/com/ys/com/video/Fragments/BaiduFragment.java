@@ -12,10 +12,10 @@ import android.webkit.WebView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.ys.com.video.Activitys.MainActivity;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.R;
 import com.ys.com.video.UI.MyWebViewClient;
-import com.ys.com.video.Activitys.MainActivity;
 
 public class BaiduFragment extends Fragment {
     @ViewInject(R.id.webview)

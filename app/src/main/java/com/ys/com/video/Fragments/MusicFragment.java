@@ -20,18 +20,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.ys.com.video.Activitys.JsonActivity;
+import com.ys.com.video.Activitys.SurfaceActivity;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.Interface.IPlayer;
 import com.ys.com.video.R;
 import com.ys.com.video.Service.MyMediaPlayerPService;
 import com.ys.com.video.Tool.ToastTool;
-import com.ys.com.video.Activitys.JsonActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,10 +46,10 @@ import static android.content.Context.BIND_AUTO_CREATE;
 
 public class MusicFragment extends Fragment {
     @ViewInject(R.id.progressBar)
-    private ProgressBar mProgressBar;
+    private  ProgressBar mProgressBar;
 
-    @ViewInject(R.id.progressBar2)
-    private static ProgressBar mProgressBar2;
+    @ViewInject(R.id.seekbar)
+    private static SeekBar seekbar;
 
     @ViewInject(R.id.textView)
     private TextView tv;
@@ -83,8 +84,8 @@ public class MusicFragment extends Fragment {
             int what = message.what;
             switch (what) {
                 case 1:
-                    mProgressBar2.setProgress(message.arg1);
-                    mProgressBar2.setMax(message.arg2);
+                    seekbar.setProgress(message.arg1);
+                    seekbar.setMax(message.arg2);
                     break;
                 case 2:
                     //         帧动画开始  src
@@ -171,11 +172,13 @@ public class MusicFragment extends Fragment {
 //                        .share();
 //                break;
 //            分享2
-//            case R.id.btn_share_2:
+            case R.id.btn_share_2:
 //                new ShareAction(MusicActivity.this).withText("hello")
 //                        .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN)
 //                        .setCallback(umShareListener).open();
-//                break;
+                 intent=new Intent(getContext(), SurfaceActivity.class);
+                startActivity(intent);
+                break;
 //            补间动画  透明度
             case R.id.image_tween:
                 if (alpha > 1.0) {
