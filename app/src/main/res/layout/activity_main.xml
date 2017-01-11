@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_height"
+        android:layout_alignParentBottom="true"
+        android:background="#F5F5F5"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout style="@style/main_style_listview">
+            <ImageView style="@style/main_style_image" />
+            <TextView
+                style="@style/main_style_text"
+                android:text="@string/baidu" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/main_style_listview">
+            <ImageView style="@style/main_style_image" />
+            <TextView
+                style="@style/main_style_text"
+                android:text="@string/qishi" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/main_style_listview">
+            <ImageView style="@style/main_style_image" />
+            <TextView
+                style="@style/main_style_text"
+                android:text="@string/bdz" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/main_style_listview">
+            <ImageView style="@style/main_style_image" />
+            <TextView
+                style="@style/main_style_text"
+                android:text="@string/video" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/main_style_listview">
+            <ImageView style="@style/main_style_image" />
+            <TextView
+                style="@style/main_style_text"
+                android:text="@string/music" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/container"
+        android:background="#44444444" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/line" />
+
+</RelativeLayout>

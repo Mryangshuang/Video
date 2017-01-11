@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">视频</string>
+    <string name="video">视频</string>
+    <string name="baidu">百度</string>
+    <string name="qishi">骑士</string>
+    <string name="bdz">剥夺者</string>
+    <string name="music">音乐</string>
+    <string name="refresh">刷新</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
