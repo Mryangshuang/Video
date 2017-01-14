@@ -21,11 +21,6 @@ public class QishiFragment extends Fragment {
     @ViewInject(R.id.webview)
     private static WebView webview;
 
-    @OnClick({R.id.refresh})
-    private void click(View view){
-        MainActivity.fragments.set(0,new BaiduFragment());
-    }
-
     private View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

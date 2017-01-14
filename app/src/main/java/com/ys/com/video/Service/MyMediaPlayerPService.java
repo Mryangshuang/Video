@@ -17,6 +17,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.ys.com.video.Fragments.MusicFragment.songs;
+
 public class MyMediaPlayerPService extends Service {
 
     private MediaPlayer mPlayer;
@@ -32,15 +34,17 @@ public class MyMediaPlayerPService extends Service {
 
     public class MBinder extends Binder implements IPlayer {
         private OnPlayListener listener;
-        public void setOnPlayListener(OnPlayListener listener){
-            this.listener=listener;
+
+        public void setOnPlayListener(OnPlayListener listener) {
+            this.listener = listener;
         }
 
         @Override
         public void callPlay(String str) {
             play(str);
-            if(listener!=null){
-                listener.onplay("宽"+mPlayer.getVideoWidth()+"---"+"高"+mPlayer.getVideoHeight());
+//            回调
+            if (listener != null) {
+                listener.onplay("宽" + mPlayer.getVideoWidth() + "---" + "高" + mPlayer.getVideoHeight());
             }
         }
 
@@ -51,28 +55,35 @@ public class MyMediaPlayerPService extends Service {
 
     }
 
-    public interface OnPlayListener{
+    public interface OnPlayListener {
         public void onplay(String mess);
     }
 
     private void play(String strName) {
-        if(mPlayer==null) {
-            mPlayer=new MediaPlayer();
+        if (mPlayer == null) {
+            mPlayer = new MediaPlayer();
         }
-        if (!mPlayer.isPlaying()) {
-            if (strName.equals("")) {
-//                设置默认歌曲
-                mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + MusicFragment.songs[0];
-                Toast.makeText(getApplicationContext(), "默认歌曲", Toast.LENGTH_LONG).show();
-            } else {
-                mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + strName;
-            }
-            if (!new File(mPath).exists()) {
-                ToastTool.toast(getApplicationContext(),"没有找到文件");
+
+        if (strName.equals("")) {
+            if (songs.length == 0) {
+                ToastTool.toast(getApplicationContext(), "一个音乐都没有");
                 return;
-            }else{
-                ToastTool.toast(getApplicationContext(),mPath);
             }
+//                设置默认歌曲
+            mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + songs[0];
+            Toast.makeText(getApplicationContext(), "播放第一首歌曲", Toast.LENGTH_LONG).show();
+        } else {
+            mPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + strName;
+        }
+//        看看输入的歌曲  是否存在  不存在就退出
+        if (!mPlayer.isPlaying()) {
+            if (!new File(mPath).exists()) {
+                ToastTool.toast(getApplicationContext(), "没有找到文件");
+                return;
+            } else {
+                ToastTool.toast(getApplicationContext(), mPath);
+            }
+
             try {
                 mPlayer.reset();
                 mPlayer.setDataSource(mPath);
@@ -118,7 +129,7 @@ public class MyMediaPlayerPService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        if(mTimer!=null&&mTimerTask!=null){
+        if (mTimer != null && mTimerTask != null) {
             mTimer.cancel();
             mTimerTask.cancel();
         }

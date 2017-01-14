@@ -1,6 +1,7 @@
 package com.ys.com.video.Fragments;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
@@ -10,7 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,14 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.ys.com.video.Activitys.JsonActivity;
+import com.ys.com.video.Activitys.RecorderActivity;
+import com.ys.com.video.Activitys.RecorderAudioActivity;
 import com.ys.com.video.Activitys.SurfaceActivity;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.Interface.IPlayer;
 import com.ys.com.video.R;
 import com.ys.com.video.Service.MyMediaPlayerPService;
+import com.ys.com.video.Tool.TimeFileTool;
 import com.ys.com.video.Tool.ToastTool;
 
 import java.io.File;
@@ -41,12 +45,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
-public class MusicFragment extends Fragment {
+public class MusicFragment extends LazyFragment {
     @ViewInject(R.id.progressBar)
-    private  ProgressBar mProgressBar;
+    private ProgressBar mProgressBar;
 
     @ViewInject(R.id.seekbar)
     private static SeekBar seekbar;
@@ -63,7 +69,6 @@ public class MusicFragment extends Fragment {
     @ViewInject(R.id.actv)
     private AutoCompleteTextView actv;
 
-
     @ViewInject(R.id.image_tween)
     private ImageView image_tween;
 
@@ -73,8 +78,17 @@ public class MusicFragment extends Fragment {
     @ViewInject(R.id.textview_sdcard)
     private TextView textview_sdcard;
 
-    private View view ;
-
+    private View view;
+    private int length;
+    private InputStream is;
+    private IPlayer mIPlayer;
+    private ServiceConnection mConn;
+    private Intent intent;
+    public static String[] songs;
+    public List<String> list;
+    private boolean isprepared;
+    private String NameFromTime;
+    private File FileFromTime;
 
     public static Handler handler = new Handler(new Handler.Callback() {
         AnimationDrawable background;
@@ -107,16 +121,14 @@ public class MusicFragment extends Fragment {
         }
     });
 
-    private InputStream is;
-    private IPlayer mIPlayer;
-    private ServiceConnection mConn;
-    private Intent intent;
-    public static String[] songs;
+
+
     //    初始透明度
     private float alpha = 0.1f;
 
     @OnClick({R.id.button, R.id.btn_play, R.id.btn_pause, R.id.btn_json,
-            R.id.btn_share_1, R.id.btn_share_2, R.id.image_tween,R.id.btn_sdcard})
+            R.id.btn_share_1, R.id.btn_share_2, R.id.image_tween, R.id.btn_sdcard,
+            R.id.btn_rec, R.id.del})
     private void click(View view) {
         switch (view.getId()) {
             case R.id.button:
@@ -126,12 +138,13 @@ public class MusicFragment extends Fragment {
                 break;
             case R.id.btn_play:
                 mIPlayer.callPlay(actv.getText().toString());
-                if(mIPlayer instanceof MyMediaPlayerPService.MBinder){
-                    MyMediaPlayerPService.MBinder binder=(MyMediaPlayerPService.MBinder)mIPlayer;
+                if (mIPlayer instanceof MyMediaPlayerPService.MBinder) {
+                    MyMediaPlayerPService.MBinder binder = (MyMediaPlayerPService.MBinder) mIPlayer;
+//                    回调
                     binder.setOnPlayListener(new MyMediaPlayerPService.OnPlayListener() {
                         @Override
                         public void onplay(String mess) {
-                            ToastTool.toast(getContext(),new MusicFragment(),mess);
+//                            ToastTool.toast(getContext(), new MusicFragment(), mess);
                         }
                     });
                 }
@@ -145,24 +158,24 @@ public class MusicFragment extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.btn_sdcard:
-                String path= Environment.getExternalStorageDirectory().getPath();
-                File file=new File(path,"sdTest.txt");
-                if(!file.exists()){
+                String path = Environment.getExternalStorageDirectory().getPath();
+                File file = new File(path, "sdTest.txt");
+                if (!file.exists()) {
                     try {
                         file.createNewFile();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                try{
-                    FileOutputStream fos=new FileOutputStream(file,false);
+                try {
+                    FileOutputStream fos = new FileOutputStream(file, false);
                     fos.write("就是这个文件".getBytes());
                     fos.flush();
                     fos.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                textview_sdcard.setText("内存："+path+"(或找到sdTest.txt)");
+                textview_sdcard.setText("内存：" + path + "(或找到sdTest.txt)");
                 break;
 //            分享1
 //            case R.id.btn_share_1:
@@ -176,7 +189,7 @@ public class MusicFragment extends Fragment {
 //                new ShareAction(MusicActivity.this).withText("hello")
 //                        .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN)
 //                        .setCallback(umShareListener).open();
-                 intent=new Intent(getContext(), SurfaceActivity.class);
+                intent = new Intent(getContext(), SurfaceActivity.class);
                 startActivity(intent);
                 break;
 //            补间动画  透明度
@@ -187,24 +200,52 @@ public class MusicFragment extends Fragment {
                 image_tween.setAlpha(alpha);
                 alpha += 0.1f;
                 break;
+            case R.id.btn_rec:
+                intent = new Intent(getContext(), RecorderActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.del:
+                String song = actv.getText().toString();
+                actv.setText("");
+                for (int i = 0; i < songs.length; i++) {
+                    if (song.equals(songs[i])) {
+                        file = new File(Environment.getExternalStorageDirectory() + File.separator + song);
+                        file.delete();
+                        findMp3();
+                        break;
+                    }else{
+                        ToastTool.toast(getContext(),"文件未找到！！");
+                        return;
+                    }
+                }
+
+                break;
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_music,null);
+    public void onResume() {
+        super.onResume();
+//        再次出现的时候   查找mp3
+        findMp3();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_music, null);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ViewUtils.inject(this,view);
+        isprepared = true;
+        ViewUtils.inject(this, view);
         //                帧动画开启
         handler.sendEmptyMessage(2);
 //        设置初始透明度
         image_tween.setAlpha(alpha);
+//        开启服务
         intent = new Intent(getActivity(), MyMediaPlayerPService.class);
         mConn = new ServiceConnection() {
             @Override
@@ -218,11 +259,51 @@ public class MusicFragment extends Fragment {
                 System.out.print("链接错误");
             }
         };
-
+//        绑定播放器服务
         getActivity().bindService(intent, mConn, BIND_AUTO_CREATE);
-        songs = new String[]{"YouAreNotHappy.mp3"};
+        initActv();
+    }
+
+    /**
+     * 初始化  actv 刷新mp3 数据
+     */
+    private void initActv() {
+        findMp3();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, songs);
         actv.setAdapter(adapter);
+    }
+
+    /**
+     * 找到  MP3 文件
+     */
+    private void findMp3() {
+        list = new ArrayList<String>();
+        length = 0;
+        songs = null;
+        File desfile = Environment.getExternalStorageDirectory();
+//        找到内存所有的文件
+        File[] files = desfile.listFiles();
+//        获得所有文件的数量
+        for (File num : files) {
+//   如果是文件   切后缀为  .mp3   算出个数
+            if (num.isFile()) {
+                String[] split = num.getName().split("\\.");
+                if ("mp3".equalsIgnoreCase(split[split.length - 1])) {
+                    length++;
+                    list.add(num.getName());
+                }
+            }
+        }
+        songs = (String[]) list.toArray(new String[list.size()]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, songs);
+        actv.setAdapter(adapter);
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if (isVisible && isprepared) {
+            initActv();
+        }
     }
 
 
@@ -232,26 +313,6 @@ public class MusicFragment extends Fragment {
     class myAsyncTask extends AsyncTask<String, Integer, String> {
         private URL mUrl;
         private InputStream mIs;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (s.equals("已下载")) {
-//                发消息停止动画
-                handler.sendEmptyMessage(3);
-                btn.setText(s);
-                getContext().bindService(intent, mConn, BIND_AUTO_CREATE);
-            } else if (s.equals("未下载")) {
-                btn.setText(s);
-                return;
-            }
-        }
-
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
@@ -265,32 +326,31 @@ public class MusicFragment extends Fragment {
             setText(tv1, Max);
         }
 
-
         @Override
         protected String doInBackground(String... strings) {
-
             int curr = 0;
-            File desfile = new File(Environment.getExternalStorageDirectory(), songs[0]);
-            if (!desfile.getParentFile().exists()) {
-                desfile.getParentFile().mkdirs();
+            NameFromTime= TimeFileTool.getTimeFile()+".mp3";
+            FileFromTime = new File(Environment.getExternalStorageDirectory(), NameFromTime);
+            if (!FileFromTime.getParentFile().exists()) {
+                FileFromTime.getParentFile().mkdirs();
             }
             try {
+                FileFromTime.createNewFile();
                 mUrl = new URL(strings[0]);
                 HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
                 int length = conn.getContentLength();
                 Log.i("length", length + "");
-
                 if (length == -1) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ToastTool.toast(getContext(),new MusicFragment(),"服务器异常.....");
+                            ToastTool.toast(getContext(), new MusicFragment(), "服务器异常.....");
                         }
                     });
                     return "未下载";
                 }
                 InputStream is = conn.getInputStream();
-                OutputStream os = new FileOutputStream(desfile);
+                OutputStream os = new FileOutputStream(FileFromTime);
                 byte[] buff = new byte[1024];
                 int len = -1;
                 while ((len = is.read(buff)) != -1) {
@@ -299,7 +359,6 @@ public class MusicFragment extends Fragment {
                     curr += len;
                     publishProgress(length, curr);
                 }
-
                 is.close();
                 os.close();
             } catch (Exception e) {
@@ -308,6 +367,23 @@ public class MusicFragment extends Fragment {
             return "已下载";
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s.equals("已下载")) {
+//                发消息停止动画
+                handler.sendEmptyMessage(3);
+                btn.setText(s);
+                getContext().bindService(intent, mConn, BIND_AUTO_CREATE);
+                initActv();
+            } else if (s.equals("未下载")) {
+                btn.setText(s);
+                if(FileFromTime.exists()){
+                    FileFromTime.delete();
+                }
+                return;
+            }
+        }
     }
 
     /**

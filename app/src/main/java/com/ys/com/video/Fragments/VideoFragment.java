@@ -1,16 +1,22 @@
 package com.ys.com.video.Fragments;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.lidroid.xutils.ViewUtils;
@@ -19,40 +25,120 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.R;
 import com.ys.com.video.Tool.DownLoadTool;
+import com.ys.com.video.Tool.TimeFileTool;
 import com.ys.com.video.Tool.ToastTool;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class VideoFragment extends LazyFragment {
-    public static final String VIDEO_NAME[] = {"V_zhouxingchi.mp4", "V_home.mp4"};
-    public static boolean isDownLoad = false;
-    private View view;
     @ViewInject(R.id.blank)
     private LinearLayout blank;
-    @ViewInject(R.id.videoview_zxc)
-    private VideoView videoView_zxc;
-    @ViewInject(R.id.videoview_home)
-    private VideoView videoView_home;
-    private VideoView[] videoViews;
+    /**
+     * 主界面
+     */
+    @ViewInject(R.id.mainview)
+    private RelativeLayout mainview;
+
+    @ViewInject(R.id.videoview)
+    private VideoView videoview;
+
     @ViewInject(R.id.ll)
     private LinearLayout ll;
-    private String path;
-    private  boolean isPrepared;
 
-    @OnClick({R.id.refresh})
+    @ViewInject(R.id.actv)
+    private AutoCompleteTextView actv;
+
+    private String path,videoName;
+    /**
+     * 为 懒加载服务
+     */
+    private  boolean isPrepared;
+    public static  String[] videos ;
+    public static boolean isDownLoad = false;
+    private View view;
+    private ArrayList<String> list;
+    private int length;
+
+    @OnClick({R.id.play,R.id.del})
     private void click(View view) {
         switch (view.getId()) {
-            case R.id.refresh:
-                playVideo(videoViews[0], Constant.URL_VIDEO_ZXC, VIDEO_NAME[0]);
-                playVideo(videoViews[1], Constant.URL_VIDEO_HOME, VIDEO_NAME[1]);
+            case R.id.play:
+                if(videos.length==0){
+//                    如果本地没有视频  就从网上进行下载
+                    videoName=TimeFileTool.getTimeFile()+".mp3";
+                    playVideo(videoview,Constant.URL_VIDEO_HOME,videoName);
+                    return;
+                }else if(!TextUtils.isEmpty(actv.getText().toString())){
+//                    如果搜索框有字  就播放搜索框里面的音乐
+                    path = Environment.getExternalStorageDirectory().getPath() + File.separator + actv.getText().toString();
+                    palyfromLocal(videoview, path);
+                }else if(TextUtils.isEmpty(actv.getText().toString())){
+//                    如果搜索框没字  就播放默认的第一首歌曲
+                    ToastTool.toast(getContext(),"播放默认歌曲");
+                    path = Environment.getExternalStorageDirectory().getPath() + File.separator +videos[0];
+                    palyfromLocal(videoview, path);
+                }
+                break;
+            case R.id.del:
+                String song = actv.getText().toString();
+                actv.setText("");
+                for (int i = 0; i < videos.length; i++) {
+                    if (song.equals(videos[i])) {
+                       File file = new File(Environment.getExternalStorageDirectory() + File.separator + song);
+                        if(file.exists()){
+                            file.delete();
+                            find3gpormp4();
+                        }
+                        break;
+                    }else{
+                        ToastTool.toast(getContext(),"文件未找到！！");
+                        return;
+                    }
+                }
                 break;
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        find3gpormp4();
+        mainview.setVisibility(View.VISIBLE);
+        ll.setVisibility(View.INVISIBLE);
+        blank.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * 找到  MP3 文件  刷新actv 数据
+     */
+    private void find3gpormp4() {
+        list = new ArrayList<String>();
+        length = 0;
+        videos = null;
+        File desfile = Environment.getExternalStorageDirectory();
+//        找到内存所有的文件
+        File[] files = desfile.listFiles();
+//        获得所有文件的数量
+        for (File num : files) {
+//   如果是文件   切后缀为  .mp3   算出个数
+            if (num.isFile()) {
+                String[] split = num.getName().split("\\.");
+                if ("3gp".equalsIgnoreCase(split[split.length - 1])||"mp4".equalsIgnoreCase(split[split.length - 1])) {
+                    length++;
+                    list.add(num.getName());
+                }
+            }
+        }
+        videos = (String[]) list.toArray(new String[list.size()]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, videos);
+        actv.setAdapter(adapter);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_video,null);
-        isPrepared=true;
         return view;
     }
 
@@ -60,12 +146,10 @@ public class VideoFragment extends LazyFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ViewUtils.inject(this,view);
-        videoViews = new VideoView[2];
-        videoViews[0] = videoView_zxc;
-        videoViews[1] = videoView_home;
-//        playVideo(videoViews[0], Constant.URL_VIDEO_ZXC, VIDEO_NAME[0]);
-//        playVideo(videoViews[1], Constant.URL_VIDEO_HOME, VIDEO_NAME[1]);
+        isPrepared=true;
+        find3gpormp4();
     }
+
     /**
      * 需要在哪个VideoView 组件上进行播放
      * \视频下载地址
@@ -81,9 +165,10 @@ public class VideoFragment extends LazyFragment {
         File file = new File(path);
         if (file.exists()) {
             isDownLoad = true;
+            mainview.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.INVISIBLE);
             blank.setVisibility(View.INVISIBLE);
             ToastTool.toast(getContext(),new VideoFragment(),"本地视频源播放");
-            ll.setVisibility(View.INVISIBLE);
 //            从本地进行播放
             palyfromLocal(view, path);
         } else {
@@ -95,18 +180,7 @@ public class VideoFragment extends LazyFragment {
     }
 
     /**
-     * 通过AsyncTask 下载后 播放
-     *
-     * @param loadpath
-     */
-    private void playbyAsyncTask(VideoView view, String loadpath, String videoName) {
-        MyAsyncTask myAsyncTask = new MyAsyncTask();
-        myAsyncTask.execute(loadpath, videoName);
-    }
-
-
-    /**
-     * 从本地进行播放
+     * 从本地进行播放 videoview \ 播放文件的绝对路径
      */
     private void palyfromLocal(VideoView view, String videoPath) {
         Uri uri = Uri.parse(videoPath);
@@ -118,7 +192,7 @@ public class VideoFragment extends LazyFragment {
             view.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    ToastTool.toast(getContext(),new VideoFragment(),"放完了一部了");
+                    ToastTool.toast(getContext(),new VideoFragment(),"放完了");
                 }
             });
     }
@@ -128,11 +202,26 @@ public class VideoFragment extends LazyFragment {
      */
     @Override
     protected void lazyLoad() {
-//        if (!isPrepared || !isVisible()) {
-//            return;
-//        }
-        playVideo(videoViews[0], Constant.URL_VIDEO_ZXC, VIDEO_NAME[0]);
-        playVideo(videoViews[1], Constant.URL_VIDEO_HOME, VIDEO_NAME[1]);
+        if (isPrepared && isVisible) {
+            find3gpormp4();
+            mainview.setVisibility(View.VISIBLE);
+            ll.setVisibility(View.INVISIBLE);
+            blank.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    /**
+     * 通过AsyncTask 下载后 播放 videoview,播放的url ,播放音乐的名字
+     *
+     * @param loadpath
+     */
+    private void playbyAsyncTask(VideoView view, String loadpath, String videoName){
+        MyAsyncTask myAsyncTask = new MyAsyncTask();
+        myAsyncTask.execute(loadpath, videoName);
+//        一下载的时候就把下载动画开启  主界面消失
+        ll.setVisibility(View.VISIBLE);
+        mainview.setVisibility(View.INVISIBLE);
     }
 
     class MyAsyncTask extends AsyncTask<String, Integer, String> {
@@ -146,18 +235,19 @@ public class VideoFragment extends LazyFragment {
         protected void onPostExecute(String videoname) {
             super.onPostExecute(videoname);
             ll.setVisibility(View.INVISIBLE);
+            path = Environment.getExternalStorageDirectory().getPath() + File.separator + videoname;
+
             if (isDownLoad) {
+                mainview.setVisibility(View.VISIBLE);
                 blank.setVisibility(View.INVISIBLE);
-                VideoView view = null;
-//                相应的歌曲找到相应的组件进行播放
-                if (videoname.equals(VIDEO_NAME[0])) {
-                    view = videoViews[0];
-                } else if (videoname.equals(VIDEO_NAME[1])) {
-                    view = videoViews[1];
-                }
-                path = Environment.getExternalStorageDirectory().getPath() + File.separator + videoname;
-                palyfromLocal(view, path);
+                palyfromLocal(videoview, path);
             } else {
+//                如果没有下载成功  就把这个音乐文件删除掉
+                File file=new File(path);
+                if(file.exists()){
+                    file.delete();
+                }
+                mainview.setVisibility(View.INVISIBLE);
                 blank.setVisibility(View.VISIBLE);
             }
         }

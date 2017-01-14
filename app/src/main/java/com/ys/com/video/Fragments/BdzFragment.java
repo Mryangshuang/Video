@@ -51,7 +51,9 @@ public class BdzFragment extends Fragment {
         if (keyCode == KeyEvent.KEYCODE_BACK && webview.canGoBack()) {
             webview.goBack();
             return true;
+        }if(!webview.canGoBack()){
+            return false;
         }
-        return false;
+        return  false;
     }
 }

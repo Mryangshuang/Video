@@ -6,35 +6,53 @@
     android:orientation="vertical"
     tools:context="com.ys.com.video.Fragments.VideoFragment">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/mainview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <VideoView
-            android:id="@+id/videoview_zxc"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <VideoView
-            android:id="@+id/videoview_home"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/refresh"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ac"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="重新播放" />
-    </LinearLayout>
+            android:orientation="horizontal">
+            <AutoCompleteTextView
+                android:id="@+id/actv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:completionThreshold="1"
+                android:hint="请输入歌曲名字"
+                />
+
+            <Button
+                android:id="@+id/del"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="删除" />
+        </LinearLayout>
+
+        <VideoView
+            android:layout_below="@id/ac"
+            android:id="@+id/videoview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+            android:id="@+id/play"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="播放" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <ProgressBar
             android:layout_width="match_parent"
