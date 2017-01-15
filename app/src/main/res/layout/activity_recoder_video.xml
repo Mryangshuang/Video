@@ -28,13 +28,13 @@
             android:id="@+id/start"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@mipmap/rec3" />
+            android:src="@drawable/selector_video" />
 
         <ImageView
             android:id="@+id/stop"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@mipmap/stop" />
+            />
 
     </LinearLayout>
 </LinearLayout>

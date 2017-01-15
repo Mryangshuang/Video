@@ -1,6 +1,7 @@
 package com.ys.com.video.Tool;
 
 import android.annotation.SuppressLint;
+
 import java.text.SimpleDateFormat;
 
 public class TimeFormat {

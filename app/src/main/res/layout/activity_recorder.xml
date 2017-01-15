@@ -9,23 +9,25 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ys.com.video.Activitys.RecorderActivity">
-<LinearLayout
-    android:layout_centerInParent="true"
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/audio"
-        android:src="@mipmap/rec1"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
-    <ImageView
-        android:id="@+id/video"
-        android:layout_marginLeft="10dp"
-        android:src="@mipmap/rec3"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
+        <ImageView
+            android:id="@+id/audio"
+            android:src="@drawable/selector_music"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+        <ImageView
+            android:id="@+id/video"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/selector_video"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
+
+    </LinearLayout>
 </RelativeLayout>

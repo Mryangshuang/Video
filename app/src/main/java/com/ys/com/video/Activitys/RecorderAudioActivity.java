@@ -2,12 +2,13 @@ package com.ys.com.video.Activitys;
 
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,9 @@ public class RecorderAudioActivity extends AppCompatActivity {
     @ViewInject(R.id.textview_time)
     private TextView textview_time;
 
+    @ViewInject(R.id.image_stop)
+    private ImageView imagestop;
+
     private int count=0;
     private boolean isrecording;
     private MediaRecorder recorder;
@@ -40,6 +44,9 @@ public class RecorderAudioActivity extends AppCompatActivity {
                 break;
             case R.id.image_stop:
                 if (recorder != null) {
+                    if(isrecording){
+                        imagestop.setImageResource(R.drawable.stop2);
+                    }
                     isrecording = false;
                     count = 0;
                     textview_time.setText("00:00:00");
@@ -63,6 +70,7 @@ public class RecorderAudioActivity extends AppCompatActivity {
         if(isrecording){
             return;
         }
+        imagestop.setImageResource(R.drawable.stop1);
         isrecording=true;
         fileName = TimeFileTool.getTimeFile() + ".mp3";
         File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + fileName);
@@ -152,6 +160,8 @@ public class RecorderAudioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_recoder);
         ViewUtils.inject(this);
+//        设置停止按钮的初始画面
+        imagestop.setImageResource(R.drawable.stop2);
     }
 
     @Override

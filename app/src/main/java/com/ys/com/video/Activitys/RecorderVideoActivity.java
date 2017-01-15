@@ -1,17 +1,14 @@
 package com.ys.com.video.Activitys;
 
-import android.content.SyncStatusObserver;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.media.MediaRecorder;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.MenuItemHoverListener;
-import android.text.format.DateFormat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -19,16 +16,14 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.ys.com.video.R;
 import com.ys.com.video.Tool.TimeFileTool;
 
-import org.apache.http.cookie.CookieAttributeHandler;
-
-import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class RecorderVideoActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     @ViewInject(R.id.surfaceview)
     private SurfaceView surfaceView;// 显示视频的控件
+
+    @ViewInject(R.id.stop)
+    private ImageView imagestop;
 
     private MediaRecorder mediarecorder;// 录制视频的类
     private SurfaceHolder surfaceHolder;
@@ -41,6 +36,7 @@ public class RecorderVideoActivity extends AppCompatActivity implements SurfaceH
                 if(isRecording){
                     return;
                 }
+                imagestop.setImageResource(R.drawable.stop1);
                 isRecording=true;
                 mediarecorder = new MediaRecorder();// 创建mediarecorder对象
                 // 设置录制视频源为Camera(相机)
@@ -73,6 +69,9 @@ public class RecorderVideoActivity extends AppCompatActivity implements SurfaceH
                 break;
             case R.id.stop:
                 if (mediarecorder != null) {
+                    if(isRecording){
+                        imagestop.setImageResource(R.drawable.stop2);
+                    }
                     isRecording=false;
                     // 停止录制
                     mediarecorder.stop();
@@ -88,6 +87,8 @@ public class RecorderVideoActivity extends AppCompatActivity implements SurfaceH
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recoder_video);
         ViewUtils.inject(this);
+//        设置停止按钮初始画面
+        imagestop.setImageResource(R.drawable.stop2);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // 选择支持半透明模式,在有surfaceview的activity中使用。  

@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:completionThreshold="1"
-                android:hint="请输入歌曲名字"
+                android:hint="请输入视频名字"
                 />
 
             <Button

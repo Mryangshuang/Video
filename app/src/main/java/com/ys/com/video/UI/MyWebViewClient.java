@@ -11,6 +11,6 @@ public class MyWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String request) {
         view.loadUrl(request);
-        return false;
+        return true;
     }
 }

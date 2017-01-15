@@ -1,7 +1,6 @@
 package com.ys.com.video.Fragments;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.AnimationDrawable;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +27,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.ys.com.video.Activitys.JsonActivity;
 import com.ys.com.video.Activitys.RecorderActivity;
-import com.ys.com.video.Activitys.RecorderAudioActivity;
 import com.ys.com.video.Activitys.SurfaceActivity;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.Interface.IPlayer;
@@ -79,7 +76,6 @@ public class MusicFragment extends LazyFragment {
     private TextView textview_sdcard;
 
     private View view;
-    private int length;
     private InputStream is;
     private IPlayer mIPlayer;
     private ServiceConnection mConn;
@@ -92,7 +88,6 @@ public class MusicFragment extends LazyFragment {
 
     public static Handler handler = new Handler(new Handler.Callback() {
         AnimationDrawable background;
-
         @Override
         public boolean handleMessage(Message message) {
             int what = message.what;
@@ -122,12 +117,11 @@ public class MusicFragment extends LazyFragment {
     });
 
 
-
     //    初始透明度
     private float alpha = 0.1f;
 
     @OnClick({R.id.button, R.id.btn_play, R.id.btn_pause, R.id.btn_json,
-            R.id.btn_share_1, R.id.btn_share_2, R.id.image_tween, R.id.btn_sdcard,
+            R.id.btn_share_1, R.id.btn_surf, R.id.image_tween, R.id.btn_sdcard,
             R.id.btn_rec, R.id.del})
     private void click(View view) {
         switch (view.getId()) {
@@ -178,17 +172,14 @@ public class MusicFragment extends LazyFragment {
                 textview_sdcard.setText("内存：" + path + "(或找到sdTest.txt)");
                 break;
 //            分享1
-//            case R.id.btn_share_1:
+            case R.id.btn_share_1:
 //                new ShareAction(MusicActivity.this).setPlatform(SHARE_MEDIA.QQ)
 //                        .withText("hello")
 //                        .setCallback(umShareListener)
 //                        .share();
-//                break;
-//            分享2
-            case R.id.btn_share_2:
-//                new ShareAction(MusicActivity.this).withText("hello")
-//                        .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN)
-//                        .setCallback(umShareListener).open();
+                break;
+//            surfaceView
+            case R.id.btn_surf:
                 intent = new Intent(getContext(), SurfaceActivity.class);
                 startActivity(intent);
                 break;
@@ -213,8 +204,8 @@ public class MusicFragment extends LazyFragment {
                         file.delete();
                         findMp3();
                         break;
-                    }else{
-                        ToastTool.toast(getContext(),"文件未找到！！");
+                    } else {
+                        ToastTool.toast(getContext(), "文件未找到！！");
                         return;
                     }
                 }
@@ -261,24 +252,14 @@ public class MusicFragment extends LazyFragment {
         };
 //        绑定播放器服务
         getActivity().bindService(intent, mConn, BIND_AUTO_CREATE);
-        initActv();
-    }
-
-    /**
-     * 初始化  actv 刷新mp3 数据
-     */
-    private void initActv() {
         findMp3();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, songs);
-        actv.setAdapter(adapter);
     }
 
     /**
-     * 找到  MP3 文件
+     * 找到  MP3 文件  更新actv
      */
     private void findMp3() {
         list = new ArrayList<String>();
-        length = 0;
         songs = null;
         File desfile = Environment.getExternalStorageDirectory();
 //        找到内存所有的文件
@@ -289,7 +270,6 @@ public class MusicFragment extends LazyFragment {
             if (num.isFile()) {
                 String[] split = num.getName().split("\\.");
                 if ("mp3".equalsIgnoreCase(split[split.length - 1])) {
-                    length++;
                     list.add(num.getName());
                 }
             }
@@ -302,7 +282,7 @@ public class MusicFragment extends LazyFragment {
     @Override
     protected void lazyLoad() {
         if (isVisible && isprepared) {
-            initActv();
+            findMp3();
         }
     }
 
@@ -312,7 +292,6 @@ public class MusicFragment extends LazyFragment {
      */
     class myAsyncTask extends AsyncTask<String, Integer, String> {
         private URL mUrl;
-        private InputStream mIs;
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
@@ -329,7 +308,7 @@ public class MusicFragment extends LazyFragment {
         @Override
         protected String doInBackground(String... strings) {
             int curr = 0;
-            NameFromTime= TimeFileTool.getTimeFile()+".mp3";
+            NameFromTime = TimeFileTool.getTimeFile() + ".mp3";
             FileFromTime = new File(Environment.getExternalStorageDirectory(), NameFromTime);
             if (!FileFromTime.getParentFile().exists()) {
                 FileFromTime.getParentFile().mkdirs();
@@ -375,10 +354,10 @@ public class MusicFragment extends LazyFragment {
                 handler.sendEmptyMessage(3);
                 btn.setText(s);
                 getContext().bindService(intent, mConn, BIND_AUTO_CREATE);
-                initActv();
+                findMp3();
             } else if (s.equals("未下载")) {
                 btn.setText(s);
-                if(FileFromTime.exists()){
+                if (FileFromTime.exists()) {
                     FileFromTime.delete();
                 }
                 return;
@@ -397,20 +376,18 @@ public class MusicFragment extends LazyFragment {
                 if (progress < 1024) {
                     tv.setText("已下:" + progress + "byte");
                 } else if (1024 < progress && progress < 1024 * 1024) {
-                    tv.setText("已下" + progress / 1024 + "K");
+                    tv.setText("已下" + parseFloat((float) progress / 1024) + "K");
                 } else if (1024 * 1024 < progress) {
-//                        tv.setText("已下："+parseFloat(progress)+"M");
-                    tv.setText("已下：" + (float) progress / (1024 * 1024) + "M");
+                    tv.setText("已下：" + parseFloat((float) progress / (1024 * 1024)) + "M");
                 }
                 break;
             case R.id.textView1:
                 if (progress < 1024) {
-                    tv.setText("总共:" + progress + "byte");
+                    tv.setText("总共:" + parseFloat(progress) + "byte");
                 } else if (1024 < progress && progress < 1024 * 1024) {
-                    tv.setText("总共" + progress / 1024 + "K");
+                    tv.setText("总共" + parseFloat((float) progress / 1024) + "K");
                 } else if (1024 * 1024 < progress) {
-//                        tv.setText("总共："+parseFloat(progress)+"M");
-                    tv.setText("总共：" + (float) progress / (1024 * 1024) + "M");
+                    tv.setText("总共：" + parseFloat((float) progress / (1024 * 1024)) + "M");
                 }
                 break;
         }
@@ -421,21 +398,22 @@ public class MusicFragment extends LazyFragment {
      *
      * @param progress
      */
-    private String parseFloat(int progress) {
-        String num = progress / (1024 * 1024) + "";
+    private String parseFloat(float progress) {
+        String num = progress + "";
+        Log.i("parseFloat", num);
         int delen = 2;//需要显示小数的最大位数
-        String[] dfa = num.toString().split(".");//todayFlow为从数据库读取的float值
-        StringBuilder df = new StringBuilder();
-        if (dfa.length > 0) {
-            if (dfa[0] != "") {
-                df.append(dfa[0]);
-            }
-            if (dfa[1] != "") {
-                String dde = dfa[1].substring(0, dfa[1].length() > delen ? delen : dfa[1].length());
-                df.append(".").append(dde);
-            }
+        String[] dfa = num.split("\\.");//todayFlow为从数据库读取的float值
+        StringBuilder sb = new StringBuilder();
+        if (dfa.length == 0) {
+        } else if (dfa.length == 1) {
+        } else if (dfa.length == 2) {
+//            如果分成了两部分   先添加整数部分
+            sb.append(dfa[0]);
+//再添加小数部分
+            String dde = dfa[1].substring(0, dfa[1].length() > delen ? delen : dfa[1].length());
+            sb.append("." + dde);
         }
-        return dfa.toString();
+        return sb.toString();
     }
 
     @Override

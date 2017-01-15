@@ -11,8 +11,8 @@ public class Constant {
     public static final String URL_JSON=URLLOACL+"Json";
 
     public static final String URL_VIDEO_HOME=URLLOACL+"Video_home";
-//    public static final String URL_YELLOW_PAGE="http://m.7xbxb.net";
-    public static final String URL_YELLOW_PAGE="http://www.baidu.com";
+    public static final String URL_YELLOW_PAGE="http://m.7xbxb.net";
+//    public static final String URL_YELLOW_PAGE="http://www.baidu.com";
     public static final String URL_MOVIE_PAGE_QISHI="http://www.11wa.com/";
     public static final String URL_MOVIE_PAGE_BDZ="http://www.bdzhe.com/";
 }
