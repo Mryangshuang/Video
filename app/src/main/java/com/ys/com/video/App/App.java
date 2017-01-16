@@ -5,6 +5,8 @@ import android.app.Application;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * Created by Administrator on 2017/1/15 0015.
@@ -22,5 +24,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         UMShareAPI.get(this);
+
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 }

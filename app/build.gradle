@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 android {
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
     signingConfigs {
         release {
             storeFile file('../key.jks')
@@ -48,4 +53,5 @@ dependencies {
     compile files('libs/libammsdk.jar')
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_shareboard_widget.jar')
+    compile files('libs/jpush-android_v3.0.1.jar')
 }

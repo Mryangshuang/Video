@@ -11,6 +11,8 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.ys.com.video.R;
 
+import static cn.jpush.android.api.JPushInterface.init;
+
 public class SplashActivity extends AppCompatActivity {
     private AnimationDrawable drawable;
     @ViewInject(R.id.image_splash)
@@ -21,6 +23,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ViewUtils.inject(this);
+//        极光推送  初始化
+        init(this);
     }
 
     @Override
