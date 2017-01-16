@@ -20,7 +20,6 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
-import com.ys.com.video.Activitys.MainActivity;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.R;
 import com.ys.com.video.UI.MyWebViewClient;
@@ -28,14 +27,14 @@ import com.ys.com.video.UI.MyWebViewClient;
 public class BaiduFragment extends Fragment {
     @ViewInject(R.id.webview)
     private static WebView webview;
-
     private View view;
 
     @OnClick({R.id.share})
     private void click(View view) {
         switch (view.getId()) {
             case R.id.share:
-//                new ShareAction(getActivity()).setPlatform(SHARE_MEDIA.WEIXIN)
+//                只用QQ分享
+//                new ShareAction(getActivity()).setPlatform(SHARE_MEDIA.QQ)
 //                        .withText("牛叉的分享")
 //                        .withTargetUrl(webview.getOriginalUrl())
 //                        .setCallback(umShareListener)
@@ -48,17 +47,15 @@ public class BaiduFragment extends Fragment {
                         .withTargetUrl(webview.getOriginalUrl())
                         .withMedia(new UMImage(getActivity(),R.mipmap.ic_launcher))
                         .open();
+                Log.i("conn",webview.getOriginalUrl());
                 break;
         }
     }
-
     private UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA platform) {
             Log.d("plat","platform"+platform);
-
             Toast.makeText(getContext(), platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
-
         }
 
         @Override
@@ -75,9 +72,8 @@ public class BaiduFragment extends Fragment {
         }
     };
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_base, null);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view=inflater.inflate(R.layout.fragment_base,null);
         return view;
     }
 
@@ -100,23 +96,20 @@ public class BaiduFragment extends Fragment {
 //设置webviewClient 后 不会从手机自带浏览器接收数据
         webview.loadUrl(Constant.URL_YELLOW_PAGE);
         webview.setWebViewClient(new MyWebViewClient());
-
     }
-
     public static boolean clickBack(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && webview.canGoBack()) {
             webview.goBack();
             return true;
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && !webview.canGoBack()) {
+        }else if(keyCode == KeyEvent.KEYCODE_BACK && !webview.canGoBack()){
             System.exit(2);
             return true;
         }
-        return false;
+        return  false;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(getActivity()).onActivityResult(requestCode, resultCode, data);
     }
-
 }

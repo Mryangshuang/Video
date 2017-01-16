@@ -47,6 +47,7 @@ public class BdzFragment extends Fragment {
                         .withTargetUrl(webview.getOriginalUrl())
                         .withMedia(new UMImage(getActivity(),R.mipmap.ic_launcher))
                         .open();
+                Log.i("conn",webview.getOriginalUrl());
                 break;
         }
     }

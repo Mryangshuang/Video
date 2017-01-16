@@ -19,7 +19,6 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMEmoji;
 import com.umeng.socialize.media.UMImage;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.R;
@@ -28,17 +27,18 @@ import com.ys.com.video.UI.MyWebViewClient;
 public class QishiFragment extends Fragment {
     @ViewInject(R.id.webview)
     private static WebView webview;
-
     private View view;
+
     @OnClick({R.id.share})
     private void click(View view) {
         switch (view.getId()) {
             case R.id.share:
+//                只用QQ分享
 //                new ShareAction(getActivity()).setPlatform(SHARE_MEDIA.QQ)
 //                        .withText("牛叉的分享")
 //                        .withTargetUrl(webview.getOriginalUrl())
 //                        .setCallback(umShareListener)
-//                        .withMedia(image)
+//                        .withMedia(new UMImage(getActivity(),R.mipmap.ic_launcher))
 //                        .share();
                 new ShareAction(getActivity())
                         .withText("牛叉的分享")
@@ -47,14 +47,18 @@ public class QishiFragment extends Fragment {
                         .withTargetUrl(webview.getOriginalUrl())
                         .withMedia(new UMImage(getActivity(),R.mipmap.ic_launcher))
                         .open();
+                Log.i("conn",webview.getOriginalUrl());
                 break;
         }
     }
     private UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat","platform"+platform);
             Toast.makeText(getContext(), platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
         }
+
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             Toast.makeText(getContext(),platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
@@ -62,14 +66,15 @@ public class QishiFragment extends Fragment {
                 Log.d("throw","throw:"+t.getMessage());
             }
         }
+
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             Toast.makeText(getContext(),platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_base,null);
         return view;
     }
@@ -77,7 +82,7 @@ public class QishiFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ViewUtils.inject(this,view);
+        ViewUtils.inject(this, view);
         //支持javascript
         webview.getSettings().setJavaScriptEnabled(true);
 // 设置可以支持缩放 
@@ -102,7 +107,7 @@ public class QishiFragment extends Fragment {
             System.exit(2);
             return true;
         }
-        return false;
+        return  false;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

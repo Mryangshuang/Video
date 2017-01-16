@@ -1,7 +1,10 @@
 package com.ys.com.video.Activitys;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,6 +24,7 @@ import com.ys.com.video.Fragments.MusicFragment;
 import com.ys.com.video.Fragments.QishiFragment;
 import com.ys.com.video.Fragments.VideoFragment;
 import com.ys.com.video.R;
+import com.ys.com.video.Receiver.NetWorkStateReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,8 @@ public class MainActivity extends BaseTabActivity {
     public static List<Fragment> fragments;
     private FragmentManager manager;
     private FragmentTransaction ft;
+//网络变化相关
+    BroadcastReceiver networkstatereceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +67,11 @@ public class MainActivity extends BaseTabActivity {
         fragments.add(music);
 
         int[][] res = {
-                {R.mipmap.ic_launcher,R.mipmap.ic_launcher},
-                {R.mipmap.ic_launcher,R.mipmap.ic_launcher},
-                {R.mipmap.ic_launcher,R.mipmap.ic_launcher},
-                {R.mipmap.ic_launcher,R.mipmap.ic_launcher},
-                {R.mipmap.ic_launcher,R.mipmap.ic_launcher}};
+                {R.mipmap.ic_launcher,R.mipmap.ic_baidu},
+                {R.mipmap.ic_launcher,R.mipmap.ic_horse},
+                {R.mipmap.ic_launcher,R.mipmap.ic_sword},
+                {R.mipmap.ic_launcher,R.mipmap.ic_video},
+                {R.mipmap.ic_launcher,R.mipmap.ic_music}};
 //        int[] textColors = {getResources().getColor(R.color.tab_text),getResources().getColor(R.color.tab_text_selected)};
         int[] textColors = {Color.BLACK,Color.RED};
         init(viewPager,container, fragments,res,textColors);
@@ -73,8 +79,34 @@ public class MainActivity extends BaseTabActivity {
         switchTab(0);
     }
 
+    /**
+     * 网络变化相关
+     */
+    @Override
+    protected void onResume() {
+        if(networkstatereceiver==null){
+            networkstatereceiver=new NetWorkStateReceiver();
+        }
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkstatereceiver,filter);
+        super.onResume();
+    }
+    /**
+     * 网络变化相关
+     */
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(networkstatereceiver);
+        super.onDestroy();
+    }
 
-
+    /**
+     * 返回键相关
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(curIndex==0){
