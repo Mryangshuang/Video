@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
-
 android {
+    signingConfigs {
+        release {
+            storeFile file('../key.jks')
+            storePassword "android"
+            keyAlias "webviewkey"
+            keyPassword "android"
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -8,16 +15,20 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName '1.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
     }
-
 }
 
 dependencies {
