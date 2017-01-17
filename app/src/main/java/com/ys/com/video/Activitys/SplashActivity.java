@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.lidroid.xutils.ViewUtils;
@@ -21,6 +22,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        设置全屏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ViewUtils.inject(this);
 //        极光推送  初始化
@@ -51,15 +54,12 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         }.start();
-
     }
 
     @Override
     protected void onDestroy() {
-        Log.i("onDestroy", "onDestroy");
         drawable.stop();
         super.onDestroy();
     }
