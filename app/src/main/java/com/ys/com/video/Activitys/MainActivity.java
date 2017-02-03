@@ -1,7 +1,6 @@
 package com.ys.com.video.Activitys;
 
 import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.umeng.socialize.UMShareAPI;
 import com.ys.com.video.Fragments.BaiduFragment;
 import com.ys.com.video.Fragments.BdzFragment;
 import com.ys.com.video.Fragments.MusicFragment;
