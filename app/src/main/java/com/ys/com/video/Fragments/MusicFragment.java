@@ -27,6 +27,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.ys.com.video.Activitys.JsonActivity;
 import com.ys.com.video.Activitys.RecorderActivity;
+import com.ys.com.video.Activitys.SMSActivity;
 import com.ys.com.video.Activitys.SurfaceActivity;
 import com.ys.com.video.Constants.Constant;
 import com.ys.com.video.Interface.IPlayer;
@@ -82,7 +83,7 @@ public class MusicFragment extends LazyFragment {
     private Intent intent;
     public static String[] songs;
     public List<String> list;
-    private boolean isprepared;
+    private boolean isprepared,sms;
     private String NameFromTime;
     private File FileFromTime;
 
@@ -152,6 +153,7 @@ public class MusicFragment extends LazyFragment {
                 startActivity(intent);
                 break;
             case R.id.btn_sdcard:
+                sms=!sms;
                 String path = Environment.getExternalStorageDirectory().getPath();
                 File file = new File(path, "sdTest.txt");
                 if (!file.exists()) {
@@ -192,7 +194,11 @@ public class MusicFragment extends LazyFragment {
                 alpha += 0.1f;
                 break;
             case R.id.btn_rec:
-                intent = new Intent(getContext(), RecorderActivity.class);
+                if(sms){
+                    intent = new Intent(getContext(), SMSActivity.class);
+                }else{
+                    intent = new Intent(getContext(), RecorderActivity.class);
+                }
                 startActivity(intent);
                 break;
             case R.id.del:

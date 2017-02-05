@@ -13,9 +13,9 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class App extends Application {
-//    注册QQ
+//    注册 微信 QQ
     {
-        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
+        PlatformConfig.setWeixin("wx463443266bb81f56", "10dacf33c247d9ae47ecb59b61f07576");
         PlatformConfig.setQQZone("1105453739", "fGQ3N1F4gj16hZ1x");
     }
 

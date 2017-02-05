@@ -33,6 +33,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
+    <!-- 短信相关 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
     <application
         android:name=".App.App"
         android:allowBackup="true"
@@ -80,7 +86,7 @@
         <!-- meta 数据 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="586a5e80b27b0a1d46000011"></meta-data>
+            android:value="586a5e80b27b0a1d46000011" />
         <!-- 微信相关 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -94,7 +100,7 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
-            android:theme="@style/MyDialogStyle"></activity>
+            android:theme="@style/MyDialogStyle" />
 
         <!-- Required SDK核心功能 -->
         <activity
@@ -113,7 +119,7 @@
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
@@ -174,6 +180,14 @@
             android:name="JPUSH_APPKEY"
             android:value="09a0cbb29cffd39490e76983" /> <!-- </>值来自开发者平台取得的AppKey -->
 
+
+        <!-- 短信相关 -->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".Activitys.SMSActivity"></activity>
     </application>
 
 </manifest>
