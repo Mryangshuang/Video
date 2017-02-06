@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
+import com.ys.com.video.Activitys.SMSActivity;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -13,6 +14,7 @@ import cn.jpush.android.api.JPushInterface;
  */
 
 public class App extends Application {
+    public int count;
 //    注册 微信 QQ
     {
         PlatformConfig.setWeixin("wx463443266bb81f56", "10dacf33c247d9ae47ecb59b61f07576");
@@ -27,5 +29,27 @@ public class App extends Application {
 
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+    }
+    /**
+     * Count 开始计数 计数完毕后重置
+     */
+    public void startCount(){
+        SMSActivity.iscounting=true;
+        new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 60; i++) {
+                    try {
+                        Thread.sleep(1000);
+                        count++;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                count=0;
+                SMSActivity.iscounting=false;
+            }
+        }.start();
+
     }
 }

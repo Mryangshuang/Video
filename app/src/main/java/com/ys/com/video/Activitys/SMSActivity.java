@@ -1,9 +1,11 @@
 package com.ys.com.video.Activitys;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +14,7 @@ import android.widget.LinearLayout;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.ys.com.video.App.App;
 import com.ys.com.video.R;
 import com.ys.com.video.Tool.ToastTool;
 
@@ -19,13 +22,11 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
 
-import static cn.smssdk.SMSSDK.getSupportedCountries;
-import static cn.smssdk.SMSSDK.getVerificationCode;
-import static cn.smssdk.SMSSDK.submitVerificationCode;
-
 
 public class SMSActivity extends AppCompatActivity {
     private String phone;
+    private App app;
+    public static boolean iscounting;
     @ViewInject(R.id.et_phone)
     private EditText et_phone;
     @ViewInject(R.id.btn_phone)
@@ -74,24 +75,33 @@ public class SMSActivity extends AppCompatActivity {
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.btn_phone:
-                if (TextUtils.isEmpty(et_phone.getText())||et_phone.getText().toString().length()!=11) {
+                if (TextUtils.isEmpty(et_phone.getText()) || et_phone.getText().toString().length() != 11) {
                     ToastTool.toast(this, "请输入正确号码");
                     return;
                 }
+                if (iscounting) {
+                    if (app.count < 60) {
+                        ToastTool.toast(this, "请" + (60 - app.count) + "秒后再试");
+                        return;
+                    }
+                }
 
-                OnSendMessageHandler listener=new OnSendMessageHandler() {
+                OnSendMessageHandler listener = new OnSendMessageHandler() {
                     @Override
                     public boolean onSendMessage(String s, String s1) {
                         return false;
                     }
                 };
-                phone=et_phone.getText().toString();
+//                保存手机号码
+                phone = et_phone.getText().toString();
 //                提交短信请求
-                getVerificationCode("86",phone,listener);
+                SMSSDK.getVerificationCode("86", phone, listener);
+                app.count = 0;
+                app.startCount();
                 break;
             case R.id.btn_submit:
 //                提交短信验证码，在监听中返回
-                submitVerificationCode("86",phone,et_psw.getText().toString());
+                SMSSDK.submitVerificationCode("86", phone, et_psw.getText().toString());
                 break;
         }
     }
@@ -104,9 +114,10 @@ public class SMSActivity extends AppCompatActivity {
         ll1.setVisibility(View.VISIBLE);
         ll2.setVisibility(View.INVISIBLE);
 //        前提必须进行调用
-        getSupportedCountries();
+        SMSSDK.getSupportedCountries();
         SMSSDK.registerEventHandler(eh); //注册短信回调
-
+//为了计数而服务  短信发送必须在 60秒以上的间隔
+        app = (App) getApplication();
     }
 
     @Override
