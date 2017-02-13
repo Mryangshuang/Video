@@ -187,7 +187,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".Activitys.SMSActivity"></activity>
+        <activity android:name=".Activitys.SMSActivity" />
     </application>
 
 </manifest>

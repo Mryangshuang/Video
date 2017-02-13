@@ -28,13 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseTabActivity {
-    public static Handler handler=new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-
-            return false;
-        }
-    });
     @ViewInject(R.id.container)
     private ViewGroup container;
 
@@ -43,8 +36,9 @@ public class MainActivity extends BaseTabActivity {
     public static List<Fragment> fragments;
     private FragmentManager manager;
     private FragmentTransaction ft;
-//网络变化相关
+    //网络变化相关
     BroadcastReceiver networkstatereceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,24 +69,22 @@ public class MainActivity extends BaseTabActivity {
         init(viewPager,container, fragments,res,textColors);
 //		默认为第几页
         switchTab(0);
+        //网络变化相关
+        initNetWork();
     }
 
     /**
-     * 网络变化相关
+     * 注册网络变化监听
      */
-    @Override
-    protected void onResume() {
+    public void initNetWork() {
         if(networkstatereceiver==null){
             networkstatereceiver=new NetWorkStateReceiver();
         }
         IntentFilter filter=new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkstatereceiver,filter);
-        super.onResume();
     }
-    /**
-     * 网络变化相关
-     */
+
     @Override
     protected void onDestroy() {
         unregisterReceiver(networkstatereceiver);

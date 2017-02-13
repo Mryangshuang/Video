@@ -1,10 +1,15 @@
 package com.ys.com.video.Activitys;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +23,7 @@ import android.widget.ImageView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.ys.com.video.R;
+import com.ys.com.video.Receiver.NetWorkStateReceiver;
 import com.ys.com.video.Tool.ToastTool;
 
 import cn.smssdk.SMSSDK;
@@ -26,6 +32,7 @@ import static cn.jpush.android.api.JPushInterface.init;
 
 public class SplashActivity extends AppCompatActivity {
     private AnimationDrawable drawable;
+
     @ViewInject(R.id.image_splash)
     private ImageView imageView;
 
@@ -41,6 +48,9 @@ public class SplashActivity extends AppCompatActivity {
         setPermission();
 //        短信初始化
         SMSSDK.initSDK(this, "1b129e6315c0a", "714eac7a4f9b6135b7fd7692b33fa505");
+///每次进入设置为第一次  用于网络变化监听
+        SharedPreferences config = getSharedPreferences("config", Context.MODE_PRIVATE);
+        config.edit().putBoolean("isfirstTime",true).commit();
     }
 
     /***
