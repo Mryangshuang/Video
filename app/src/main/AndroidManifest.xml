@@ -49,21 +49,30 @@
         <activity android:name=".Activitys.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activitys.MainActivity" />
-        <activity android:name=".Activitys.JsonActivity" />
-        <activity android:name=".Activitys.SurfaceActivity" />
+        <activity
+            android:name=".Activitys.MainActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+        <activity
+            android:name=".Activitys.JsonActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+        <activity
+            android:name=".Activitys.SurfaceActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
 
         <service android:name=".Service.MyMediaPlayerPService" />
 
-        <activity android:name=".Activitys.RecorderAudioActivity" />
+        <activity
+            android:name=".Activitys.RecorderAudioActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
         <activity
             android:name=".Activitys.RecorderVideoActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".Activitys.RecorderActivity" />
+        <activity
+            android:name=".Activitys.RecorderActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
         <!-- QQ -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

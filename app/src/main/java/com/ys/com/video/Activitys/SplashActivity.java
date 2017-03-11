@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
         config.edit().putBoolean("isfirstTime",true).commit();
     }
 
-    /***
+    /**
      * 对于安卓6.0以上的进行权限申请
      */
     private void setPermission() {
