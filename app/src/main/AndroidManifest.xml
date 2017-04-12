@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
     package="com.ys.com.video">
 
     <!-- Required -->
@@ -40,6 +41,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
+
         android:name=".App.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -49,30 +51,31 @@
         <activity android:name=".Activitys.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activitys.MainActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+            android:configChanges="screenSize|keyboardHidden|orientation" />
         <activity
             android:name=".Activitys.JsonActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+            android:configChanges="screenSize|keyboardHidden|orientation" />
         <activity
             android:name=".Activitys.SurfaceActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+            android:configChanges="screenSize|keyboardHidden|orientation" />
 
         <service android:name=".Service.MyMediaPlayerPService" />
 
         <activity
             android:name=".Activitys.RecorderAudioActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+            android:configChanges="screenSize|keyboardHidden|orientation" />
         <activity
             android:name=".Activitys.RecorderVideoActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".Activitys.RecorderActivity"
-            android:configChanges="screenSize|keyboardHidden|orientation"></activity>
+            android:configChanges="screenSize|keyboardHidden|orientation" />
         <!-- QQ -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
@@ -197,6 +200,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".Activitys.SMSActivity" />
+        <activity android:name=".Activitys.QRActivity"></activity>
     </application>
 
 </manifest>

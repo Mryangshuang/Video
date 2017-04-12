@@ -143,11 +143,11 @@
             android:text="Sd" />
 
         <Button
-            android:id="@+id/btn_share_1"
+            android:id="@+id/btn_QR"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="分享1" />
+            android:text="二维码" />
 
         <Button
             android:id="@+id/btn_surf"
