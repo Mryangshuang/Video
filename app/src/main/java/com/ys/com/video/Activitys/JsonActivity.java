@@ -38,7 +38,6 @@ public class JsonActivity extends AppCompatActivity {
         ViewUtils.inject(this);
 
 
-//
         String path=Environment.getExternalStorageDirectory().getPath()+File.separator+"TkHot.json";
         File file=new File(path);
 //        如果存在，就从本地加载，如果不存在，就下载后从  加载
@@ -86,11 +85,11 @@ public class JsonActivity extends AppCompatActivity {
 
                 setadapter(sb.toString());
             }catch (Exception e){
-                e.printStackTrace();
+//                e.printStackTrace();
+                ToastTool.toast(this,"出错了");
             }
         }
     }
-
     /**
      * 为ListView 添加数据
      * @param str

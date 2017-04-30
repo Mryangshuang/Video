@@ -1,15 +1,12 @@
 package com.ys.com.video.Activitys;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +20,6 @@ import android.widget.ImageView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.ys.com.video.R;
-import com.ys.com.video.Receiver.NetWorkStateReceiver;
 import com.ys.com.video.Tool.ToastTool;
 
 import cn.smssdk.SMSSDK;
@@ -53,7 +49,7 @@ public class SplashActivity extends AppCompatActivity {
         config.edit().putBoolean("isfirstTime",true).commit();
     }
 
-    /***
+    /**
      * 对于安卓6.0以上的进行权限申请
      */
     private void setPermission() {

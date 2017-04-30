@@ -5,7 +5,7 @@ package com.ys.com.video.Constants;
  */
 
 public class Constant {
-    private   static final String URLLOACL="http://192.168.1.10:8080/DownLoad/";
+    private   static final String URLLOACL="http://172.168.1.101:8080/DownLoad/";
     public static final String URL_MUSIC=URLLOACL+"Music";
     public static final String URL_VIDEO_ZXC=URLLOACL+"Video_zxc";
     public static final String URL_JSON=URLLOACL+"Json";
