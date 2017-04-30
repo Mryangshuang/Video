@@ -188,6 +188,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".Activitys.SMSActivity" />
+        <activity android:name=".Activitys.QRActivity" />
     </application>
 
 </manifest>

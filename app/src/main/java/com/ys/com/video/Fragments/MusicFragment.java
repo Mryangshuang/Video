@@ -26,6 +26,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.ys.com.video.Activitys.JsonActivity;
+import com.ys.com.video.Activitys.QRActivity;
 import com.ys.com.video.Activitys.RecorderActivity;
 import com.ys.com.video.Activitys.SMSActivity;
 import com.ys.com.video.Activitys.SurfaceActivity;
@@ -122,7 +123,7 @@ public class MusicFragment extends LazyFragment {
     private float alpha = 0.1f;
 
     @OnClick({R.id.button, R.id.btn_play, R.id.btn_pause, R.id.btn_json,
-            R.id.btn_share_1, R.id.btn_surf, R.id.image_tween, R.id.btn_sdcard,
+            R.id.btn_qr, R.id.btn_surf, R.id.image_tween, R.id.btn_sdcard,
             R.id.btn_rec, R.id.del})
     private void click(View view) {
         switch (view.getId()) {
@@ -174,11 +175,13 @@ public class MusicFragment extends LazyFragment {
                 textview_sdcard.setText("内存：" + path + "(或找到sdTest.txt)");
                 break;
 //            分享1
-            case R.id.btn_share_1:
+            case R.id.btn_qr:
 //                new ShareAction(MusicActivity.this).setPlatform(SHARE_MEDIA.QQ)
 //                        .withText("hello")
 //                        .setCallback(umShareListener)
 //                        .share();
+                intent=new Intent(getActivity(), QRActivity.class);
+                startActivity(intent);
                 break;
 //            surfaceView
             case R.id.btn_surf:
