@@ -174,7 +174,7 @@ public class MusicFragment extends LazyFragment {
                 }
                 textview_sdcard.setText("内存：" + path + "(或找到sdTest.txt)");
                 break;
-//            分享1
+//            QR
             case R.id.btn_qr:
 //                new ShareAction(MusicActivity.this).setPlatform(SHARE_MEDIA.QQ)
 //                        .withText("hello")

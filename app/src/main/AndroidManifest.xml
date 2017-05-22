@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ys.com.video">
 
     <!-- Required -->
@@ -40,6 +41,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
+        tools:replace="Android:icon, android:theme"
         android:name=".App.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -53,7 +55,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activitys.MainActivity" />
+        <activity android:name=".Activitys.MainActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            />
         <activity android:name=".Activitys.JsonActivity" />
         <activity android:name=".Activitys.SurfaceActivity" />
 

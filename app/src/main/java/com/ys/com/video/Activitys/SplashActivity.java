@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void setPermission() {
         if(Build.VERSION.SDK_INT>=23){
-            int i =ContextCompat.checkSelfPermission(this, Manifest.permission_group.STORAGE);
+            int i = ContextCompat.checkSelfPermission(this, Manifest.permission_group.STORAGE);
             if(i!= PackageManager.PERMISSION_GRANTED){
                 //            如果没有获取权限  有没弹出对话框
                 if(!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission_group.STORAGE)){

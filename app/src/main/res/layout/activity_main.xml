@@ -10,7 +10,8 @@
         android:layout_alignParentBottom="true"
         android:background="#F5F5F5"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <LinearLayout style="@style/main_style_listview">
             <ImageView style="@style/main_style_image" />
