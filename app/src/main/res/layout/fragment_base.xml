@@ -4,10 +4,45 @@
     android:layout_height="match_parent"
     tools:context="com.ys.com.video.Fragments.BaiduFragment">
 
+
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <Button
+            android:id="@+id/baidu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="百度"/>
+        <Button
+            android:id="@+id/jp_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="精品一"/>
+        <Button
+            android:id="@+id/jp_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="精品二"/>
+        <Button
+            android:id="@+id/jp_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="精品三"/>
+        <Button
+            android:id="@+id/change_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更改密码"/>
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/share"

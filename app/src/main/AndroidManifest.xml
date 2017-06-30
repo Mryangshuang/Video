@@ -59,6 +59,7 @@
             android:configChanges="screenSize|orientation|keyboardHidden"
             />
         <activity android:name=".Activitys.JsonActivity" />
+        <activity android:name=".Activitys.PassWordActivity"/>
         <activity android:name=".Activitys.SurfaceActivity" />
 
         <service android:name=".Service.MyMediaPlayerPService" />
