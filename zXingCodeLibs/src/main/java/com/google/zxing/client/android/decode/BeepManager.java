@@ -24,10 +24,10 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
 
-import java.io.IOException;
-
 import com.libs.zxing.Config;
 import com.libs.zxing.R;
+
+import java.io.IOException;
 
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}.
@@ -54,7 +54,7 @@ public final class BeepManager
 
     public void updatePrefs(){
         playBeep = shouldBeep (activity);
-        vibrate =Config.KEY_VIBRATE;
+        vibrate = Config.KEY_VIBRATE;
         if (playBeep && mediaPlayer == null)
         {
             // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,

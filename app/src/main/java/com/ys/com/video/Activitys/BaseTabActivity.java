@@ -37,7 +37,7 @@ public abstract class BaseTabActivity extends FragmentActivity implements OnClic
 	 * @param tabContainer
 	 * @param fragments
 	 */
-	public  void init(ViewPager viewPager,ViewGroup tabContainer,List<Fragment> fragments,int[][] drawableResIdsColors,int[] textColors){
+	public  void init(ViewPager viewPager, ViewGroup tabContainer, List<Fragment> fragments, int[][] drawableResIdsColors, int[] textColors){
 		this.viewPager = viewPager;
 		this.drawableResIdsColors = drawableResIdsColors;
 		this.textColors = textColors;

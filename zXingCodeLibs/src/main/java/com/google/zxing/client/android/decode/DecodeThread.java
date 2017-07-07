@@ -16,15 +16,14 @@
 
 package com.google.zxing.client.android.decode;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
 import com.libs.zxing.CaptureActivity;
 import com.libs.zxing.Config;
-
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 
 import java.util.Collection;
 import java.util.EnumMap;

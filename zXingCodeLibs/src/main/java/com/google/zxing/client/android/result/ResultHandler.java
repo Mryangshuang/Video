@@ -16,11 +16,6 @@
 
 package com.google.zxing.client.android.result;
 
-import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ParsedResultType;
-import com.libs.zxing.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -32,6 +27,11 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.zxing.Result;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
+import com.libs.zxing.R;
 
 import java.util.Collection;
 import java.util.Locale;

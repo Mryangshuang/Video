@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.zxing.client.android.decode.Intents;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -84,8 +83,8 @@ public class BaiduFragment extends Fragment {
     }
 
     /**
-     * 第一个参数 1：是检验密码  2：更改密码
-     * 第二个参数 0：检验密码的请求码  1：更改密码的请求码  在onActivityResult使用
+     * 第一个参数 标记1：是检验密码  2：更改密码
+     * 第二个参数 请求码0：检验密码的请求码  1：更改密码的请求码  在onActivityResult使用
      * @param style
      * @param RequestNum
      */

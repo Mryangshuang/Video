@@ -1,8 +1,5 @@
 package com.libs.zxing;
 
-import java.io.IOException;
-import java.util.Collection;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,6 +29,9 @@ import com.google.zxing.client.android.decode.InactivityTimer;
 import com.google.zxing.client.android.decode.ViewfinderView;
 import com.google.zxing.client.android.result.ResultHandler;
 import com.google.zxing.client.android.result.ResultHandlerFactory;
+
+import java.io.IOException;
+import java.util.Collection;
 
 public final class CaptureActivity extends Activity implements
 		SurfaceHolder.Callback {
