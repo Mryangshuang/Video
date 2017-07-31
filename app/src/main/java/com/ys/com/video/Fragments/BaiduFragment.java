@@ -53,7 +53,7 @@ public class BaiduFragment extends Fragment {
 //                        .share();
                 new ShareAction(getActivity())
                         .withText("牛叉的分享")
-                        .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN)
+                        .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN,SHARE_MEDIA.SINA)
                         .setCallback(umShareListener)
                         .withTargetUrl(webview.getOriginalUrl())
                         .withMedia(new UMImage(getActivity(),R.mipmap.ic_launcher))
