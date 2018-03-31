@@ -21,7 +21,7 @@
 	 <string name="button_3">其它标题</string>
 	 <string name="result_title_default">网址路径</string>
 	 
-	 <string name="qrcode_notice">将二维码图案放在取景框内，即可自动扫描。</string>
+	 <string name="qrcode_notice">依赖库ZXingCode，二维码扫描。</string>
 	 <string name="openorclose_light">打开或关闭灯光</string>
 	 <string name="qrcode_empty"></string>
 	 
